@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zinara Digital - Complete November Calendar</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f5f5;
+            padding: 20px;
+            font-size: 13px;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #006B7D 0%, #FF6B35 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 24px;
+            margin-bottom: 8px;
+        }
+
+        .controls {
+            background: white;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .controls select, .controls button {
+            padding: 8px 12px;
+            border: 2px solid #006B7D;
+            border-radius: 6px;
+            font-size: 13px;
+            cursor: pointer;
+        }
+
+        .controls button {
+            background: #FF6B35;
+            color: white;
+            border: none;
+            font-weight: 600;
+        }
+
+        .table-container {
+            background: white;
+            border-radius: 10px;
+            overflow-x: auto;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 1400px;
+        }
+
+        thead {
+            background: #006B7D;
+            color: white;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        th {
+            padding: 12px 8px;
+            text-align: left;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        td {
+            padding: 10px 8px;
+            border-bottom: 1px solid #e0e0e0;
+            font-size: 12px;
+            vertical-align: top;
+            line-height: 1.5;
+        }
+
+        tbody tr:hover {
+            background: #f9f9f9;
+        }
+
+        .date-cell {
+            font-weight: 600;
+            color: #006B7D;
+            white-space: nowrap;
+            min-width: 70px;
+        }
+
+        .platform-icon {
+            width: 24px;
+            height: 24px;
+            border-radius: 4px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            font-weight: bold;
+            color: white;
+        }
+
+        .linkedin { background: #0077B5; }
+        .instagram { background: linear-gradient(45deg, #f09433 0%, #dc2743 50%, #bc1888 100%); }
+        .facebook { background: #1877F2; }
+
+        .time-badge {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 10px;
+            font-weight: 600;
+            margin-bottom: 4px;
+            color: white;
+        }
+
+        .morning { background: #FFB84D; }
+        .afternoon { background: #4CAF50; }
+        .evening { background: #FF6B35; }
+
+        .content-cell {
+            max-width: 350px;
+            font-size: 12px;
+        }
+
+        .hashtags {
+            color: #0077B5;
+            font-size: 10px;
+            margin-top: 6px;
+            display: block;
+            font-weight: 500;
+        }
+
+        .week-header {
+            background: #f0f9fa;
+            font-weight: 700;
+            color: #006B7D;
+        }
+
+        .week-header td {
+            padding: 12px;
+            border-bottom: 2px solid #006B7D;
+            font-size: 13px;
+        }
+
+        .canva-cell {
+            font-size: 11px;
+            color: #666;
+            max-width: 250px;
+        }
+
+        @media print {
+            .controls { display: none; }
+            thead { background: #006B7D !important; }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🚀 ZINARA DIGITAL - Complete November 2025 Social Media Calendar</h1>
+        <p style="font-size: 13px;">90 Posts | 3 Daily Posts | AI-Powered Content | Conversion-Optimized</p>
+    </div>
+
+    <div class="controls">
+        <select id="weekFilter">
+            <option value="all">All Weeks</option>
+            <option value="week1">Week 1 (Nov 1-7)</option>
+            <option value="week2">Week 2 (Nov 8-14)</option>
+            <option value="week3">Week 3 (Nov 15-21)</option>
+            <option value="week4">Week 4 (Nov 22-28)</option>
+            <option value="week5">Week 5 (Nov 29-30)</option>
+        </select>
+        <select id="platformFilter">
+            <option value="all">All Platforms</option>
+            <option value="LinkedIn">LinkedIn</option>
+            <option value="Instagram">Instagram</option>
+            <option value="Facebook">Facebook</option>
+        </select>
+        <button onclick="exportToCSV()">📥 Export CSV</button>
+        <button onclick="window.print()">🖨️ Print</button>
+    </div>
+
+    <div class="table-container">
+        <table id="contentTable">
+            <thead>
+                <tr>
+                    <th style="width: 80px;">Date</th>
+                    <th style="width: 90px;">Platform</th>
+                    <th style="width: 100px;">Time/Type</th>
+                    <th style="width: 150px;">Purpose</th>
+                    <th>Caption Content</th>
+                    <th style="width: 230px;">Canva Design</th>
+                    <th style="width: 180px;">Hashtags</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- WEEK 1: AWARENESS & ORIGIN -->
+                <tr class="week-header">
+                    <td colspan="7">WEEK 1 (Nov 1-7): AWARENESS & ORIGIN - Why Zinara Exists</td>
+                </tr>
+                
+                <!-- Nov 1 -->
+                <tr data-week="week1" data-platform="LinkedIn">
+                    <td class="date-cell">Nov 1<br><small>Fri</small></td>
+                    <td><span class="platform-icon linkedin">in</span></td>
+                    <td><span class="time-badge morning">Morning</span><br>7 AM</td>
+                    <td>Launch: Invisible Entrepreneurs</td>
+                    <td class="content-cell"><strong>Every empire started invisible.</strong><br><br>Before Apple had the iPhone. Before Safaricom had M-Pesa. Before your favorite brand became a household name...<br><br>They were just an idea. A dream. A founder working late nights, wondering: "Will anyone even see this?"<br><br>That's where Zinara comes in.<br><br>We exist because too many brilliant Kenyan businesses remain invisible—not because they lack quality, but because they lack the right digital presence.<br><br>This month, we're sharing the journey from invisible to unstoppable. The journey to digital growth starts here. 🚀<span class="hashtags">#ZinaraDigital #DigitalGrowthJourney #KenyanEntrepreneurs #VisibilityMatters</span></td>
+                    <td class="canva-cell">Mountain silhouette at sunrise, gradient teal to orange. Text: "Every empire started invisible" in bold white Montserrat. Zinara logo bottom-right.</td>
+                    <td class="hashtags">#ZinaraDigital #DigitalGrowthJourney #KenyanEntrepreneurs #VisibilityMatters #SMEGrowthKenya</td>
+                </tr>
+                
+                <tr data-week="week1" data-platform="Instagram">
+                    <td class="date-cell">Nov 1</td>
+                    <td><span class="platform-icon instagram">IG</span></td>
+                    <td><span class="time-badge afternoon">Afternoon</span><br>1 PM</td>
+                    <td>Story: Sarah's Journey</td>
+                    <td class="content-cell">Meet Sarah. 3 years in business. Amazing products. Zero online presence.<br><br>She tried:<br>❌ Random posting<br>❌ Phone camera, bad lighting<br>❌ Captions like "Check out our products!"<br><br>The truth? Sarah wasn't failing. Her business was invisible.<br><br>Then she discovered Zinara.<br><br>We don't just post. We build visibility systems that turn browsers into buyers.<br><br>Sarah now gets 15-20 inquiries/week. Her Instagram looks professional. She has her evenings back.<br><br>Your turn. 👇<span class="hashtags">#ZinaraSuccess #BeforeAndAfter #DigitalTransformation</span></td>
+                    <td class="canva-cell">Split-screen carousel. Left: Grayscale "BEFORE" sparse IG feed. Right: Vibrant "AFTER" professional feed. Growth arrow center. Text: "From Invisible to Unstoppable"</td>
+                    <td class="hashtags">#ZinaraSuccess #BeforeAndAfter #DigitalTransformation #KenyanSMEs #SocialMediaGrowth</td>
+                </tr>
+                
+                <tr data-week="week1" data-platform="Facebook">
+                    <td class="date-cell">Nov 1</td>
+                    <td><span class="platform-icon facebook">f</span></td>
+                    <td><span class="time-badge evening">Evening</span><br>7 PM</td>
+                    <td>CTA: Free Audit</td>
+                    <td class="content-cell">If you've ever felt invisible in a crowded market...<br>If you've poured your heart into your business but the world hasn't noticed...<br>If competitors with flashier marketing are winning...<br><br>This is for you.<br><br>Zinara was built for the overlooked. The underestimated. The entrepreneurs who deserve to be seen.<br><br>We use AI + human strategy to give Kenyan SMEs the digital presence they deserve—without KES 100K/month fees.<br><br>🎯 <strong>Book your FREE 15-min growth audit</strong><br><br>👉 Comment "GROWTH" or DM us.<br><br>Because your business deserves to be seen.<span class="hashtags">#FreeAudit #ZinaraDigital #GrowthStrategy</span></td>
+                    <td class="canva-cell">Dark teal background, spotlight effect center. Text: "Your Business Deserves To Be Seen" bold white. Orange CTA button: "Book Free Audit →". Contact info bottom.</td>
+                    <td class="hashtags">#FreeAudit #ZinaraDigital #GrowthStrategy #KenyanBusiness #DigitalMarketing</td>
+                </tr>
+
+                <!-- Nov 2 -->
+                <tr data-week="week1" data-platform="LinkedIn">
+                    <td class="date-cell">Nov 2<br><small>Sat</small></td>
+                    <td><span class="platform-icon linkedin">in</span></td>
+                    <td><span class="time-badge morning">Morning</span><br>8 AM</td>
+                    <td>Insight: Quality vs Visibility</td>
+                    <td class="content-cell"><strong>Your competitors aren't better. They're just louder.</strong><br><br>The uncomfortable truth about business in 2025:<br><br>The best product doesn't win. The most visible product wins.<br><br>You could have:<br>✅ Fastest delivery in Nairobi<br>✅ Highest quality materials<br>✅ 5-star customer service<br>✅ Prices 20% better<br><br>But if nobody can find you online? You're invisible.<br><br>Invisible businesses don't grow. They survive. Barely.<br><br>At Zinara, we close that gap. We turn quality into visibility. Potential into profit. Silence into sales.<br><br>Because you didn't build something amazing just to be ignored.<span class="hashtags">#BusinessTruth #VisibilityWins #MarketingReality</span></td>
+                    <td class="canva-cell">Two panels. Panel 1: Small faded icon "Best Product". Panel 2: Large vibrant megaphone "Most Visible". Arrow between. Text: "Zinara closes this gap." Brand colors.</td>
+                    <td class="hashtags">#BusinessTruth #VisibilityWins #MarketingReality #EntrepreneurMindset #ZinaraInsights</td>
+                </tr>
+                
+                <tr data-week="week1" data-platform="Instagram">
+                    <td class="date-cell">Nov 2</td>
+                    <td><span class="platform-icon instagram">IG</span></td>
+                    <td><span class="time-badge afternoon">Afternoon</span><br>2 PM</td>
+                    <td>Story: Founder Origin</td>
+                    <td class="content-cell">I'll never forget the conversation that started Zinara.<br><br>A friend—brilliant entrepreneur, amazing business—told me:<br><br>"I reached out to 3 agencies. They quoted KES 80K-150K/month. I make KES 200K in good months. How does that work?"<br><br>She wasn't alone.<br><br>I met:<br>📍 Coffee shop with lines out the door—no Google reviews<br>📍 Fashion designer with 500 followers—5,000 sales potential<br>📍 Tech startup with game-changing product—2015 website<br><br>All invisible. All priced out of "professional" marketing.<br><br>That's the problem Zinara solves.<br><br>AI does in 2 hours what agencies do in 2 weeks. Same quality. 1/5th cost.<br><br>Big impact. Small budget. Smart AI.<span class="hashtags">#FounderStory #WhyWeExist #ZinaraOrigin</span></td>
+                    <td class="canva-cell">Workspace flat lay: Laptop with Zinara site, coffee, notebooks. Warm filter. Overlay text: "Built for entrepreneurs who deserve to be seen." Handwritten font. Orange accents.</td>
+                    <td class="hashtags">#FounderStory #WhyWeExist #ZinaraOrigin #PurposeDriven #AffordableMarketing</td>
+                </tr>
+                
+                <tr data-week="week1" data-platform="Facebook">
+                    <td class="date-cell">Nov 2</td>
+                    <td><span class="platform-icon facebook">f</span></td>
+                    <td><span class="time-badge evening">Evening</span><br>6 PM</td>
+                    <td>CTA: Pricing Reality</td>
+                    <td class="content-cell">Let's talk money. Real numbers.<br><br>Traditional agency: KES 80K-150K/month<br>Full-time social media manager: KES 60K+/month<br>Doing it yourself: 15+ hours/week<br><br>Zinara: KES 12K-25K/month. Done for you. Professional. Results-driven.<br><br>What you get:<br>✅ 12-20 posts/month<br>✅ AI-powered content<br>✅ Daily engagement<br>✅ Strategic planning<br>✅ Monthly analytics<br><br>What you REALLY get:<br>🎯 Your evenings back<br>🎯 Premium brand presence<br>🎯 Customers who find YOU<br>🎯 Measurable growth<br><br>This week only: Free audit + custom 30-day plan.<br><br>👉 Link in bio or DM "AUDIT"<span class="hashtags">#AffordableMarketing #SMEGrowth #ZinaraPricing</span></td>
+                    <td class="canva-cell">Pricing comparison table. 3 columns: "Traditional" (KES 100K, red), "DIY" (15hrs, yellow), "Zinara" (KES 15K, green check). Benefits listed. CTA button bottom.</td>
+                    <td class="hashtags">#AffordableMarketing #SMEGrowth #ZinaraPricing #ROI #MarketingInvestment</td>
+                </tr>
+
+                <!-- Nov 3 -->
+                <tr data-week="week1" data-platform="LinkedIn">
+                    <td class="date-cell">Nov 3<br><small>Sun</small></td>
+                    <td><span class="platform-icon linkedin">in</span></td>
+                    <td><span class="time-badge morning">Morning</span><br>9 AM</td>
+                    <td>Insight: Sunday Reflection</td>
+                    <td class="content-cell"><strong>Sunday question: What if your competitors stopped outspending you?</strong><br><br>Here's what most SMEs get wrong:<br><br>They think: "I can't compete with their marketing budget."<br><br>But here's the truth: In 2025, AI has leveled the playing field.<br><br>That KES 100K/month agency?<br>• They use the same AI tools we do<br>• They have 20 clients fighting for attention<br>• Their junior staff does most work<br>• You're paying for overhead, not results<br><br>Zinara's advantage:<br>• Same AI tools, smarter strategy<br>• You work with the founder<br>• Live in 48 hours (not weeks)<br>• Price that makes sense<br><br>You don't need more money. You need smarter marketing.<br><br>That's Zinara.<span class="hashtags">#SundayThoughts #SmartMarketing #AIForGood</span></td>
+                    <td class="canva-cell">Minimalist design. Scale graphic showing "Big Budget" vs "Smart Strategy". Zinara tips the scale. Clean lines, teal/orange. Text: "You don't need more money. You need smarter marketing."</td>
+                    <td class="hashtags">#SundayThoughts #SmartMarketing #AIForGood #EntrepreneurSunday #ZinaraWisdom</td>
+                </tr>
+                
+                <tr data-week="week1" data-platform="Instagram">
+                    <td class="date-cell">Nov 3</td>
+                    <td><span class="platform-icon instagram">IG</span></td>
+                    <td><span class="time-badge afternoon">Afternoon</span><br>3 PM</td>
+                    <td>Story: Weekend Wins</td>
+                    <td class="content-cell">This happened Friday:<br><br>A prospect said: "Your pricing seems too good to be true. What's the catch?"<br><br>My answer?<br><br>"There's no catch. Just math."<br><br>Here's how Zinara works:<br><br>Traditional agency:<br>• Fancy office: KES 200K/month<br>• Account managers: KES 80K each<br>• Designers: KES 60K each<br>• Coffee, perks, overhead<br>• THEN they add profit margin<br><br>Zinara:<br>• Remote (no office overhead)<br>• AI handles repetitive tasks<br>• We hire only when needed<br>• Savings passed to YOU<br><br>Same quality. Real results. No fluff.<br><br>The only "catch"? We actually care about your success.<br><br>Wild, right? 😉<span class="hashtags">#TransparentPricing #NoFluff #RealTalk</span></td>
+                    <td class="canva-cell">Infographic showing cost breakdown. Left: Traditional agency expenses stacked (office, staff, overhead). Right: Zinara streamlined model. Savings arrow pointing to "Your Benefit". Clean, educational style.</td>
+                    <td class="hashtags">#TransparentPricing #NoFluff #RealTalk #HonestMarketing #ZinaraDifference</td>
+                </tr>
+                
+                <tr data-week="week1" data-platform="Facebook">
+                    <td class="date-cell">Nov 3</td>
+                    <td><span class="platform-icon facebook">f</span></td>
+                    <td><span class="time-badge evening">Evening</span><br>6 PM</td>
+                    <td>CTA: Sunday Special</td>
+                    <td class="content-cell">Sunday evening. Perfect time for honest questions:<br><br>❓ Why isn't your business growing online?<br>❓ Why do competitors with worse products get more attention?<br>❓ Why does professional marketing feel out of reach?<br><br>Here's the truth:<br><br>It's not you. It's not your product. It's not your pricing.<br><br>It's visibility.<br><br>And visibility in 2025 doesn't require a KES 100K budget. It requires the right strategy + the right tools.<br><br>That's literally what we do.<br><br>🎁 <strong>Sunday Special: Book this week, get your first month's content calendar FREE</strong> (Worth KES 15K)<br><br>We'll show you exactly how to:<br>✅ Build a content system that works<br>✅ Attract your ideal customers<br>✅ Convert followers to buyers<br><br>👉 DM "SUNDAY" to claim<br><br>Offer ends Monday night.<span class="hashtags">#SundaySpecial #LimitedOffer #ZinaraDeal</span></td>
+                    <td class="canva-cell">Bold design with clock showing Sunday evening. "Sunday Special" in large text. Benefit bullets with checkmarks. Urgency element: "Ends Monday" in orange. CTA button prominent.</td>
+                    <td class="hashtags">#SundaySpecial #LimitedOffer #ZinaraDeal #WeekendPromo #SmartMarketing</td>
+                </tr>
+
+                <!-- Nov 4 -->
+                <tr data-week="week1" data-platform="LinkedIn">
+                    <td class="date-cell">Nov 4<br><small>Mon</small></td>
+                    <td><span class="platform-icon linkedin">in</span></td>
+                    <td><span class="time-badge morning">Morning</span><br>7 AM</td>
+                    <td>Monday Motivation</td>
+                    <td class="content-cell"><strong>Monday reality check: Your product is too good to be invisible.</strong><br><br>You built something amazing. You know it's better than competitors'. You've poured money, time, and heart into it.<br><br>But when potential customers search for solutions...<br>They find your competitors first.<br><br>When they scroll social media...<br>Your competitors' polished posts catch their eye.<br><br>When they ask for recommendations...<br>Your competitors' names come up.<br><br>Not because they're better.<br>Because they're MORE VISIBLE.<br><br>This week, change that.<br><br>Zinara helps quality businesses become visible businesses.<br><br>Because the best product should win. Not just the loudest.<br><br>Ready to be seen? Let's talk.<span class="hashtags">#MondayMotivation #VisibilityMatters #QualityDeservesVisibility</span></td>
+                    <td class="canva-cell">Spotlight effect on a product/business in darkness, with light breaking through. Text: "Too good to be invisible" in bold. Motivational Monday theme, energetic orange/teal gradient.</td>
+                    <td class="hashtags">#MondayMotivation #VisibilityMatters #QualityDeservesVisibility #EntrepreneurMonday #ZinaraInsights</td>
+                </tr>
+                
+                <tr data-week="week1" data-platform="Instagram">
+                    <td class="date-cell">Nov 4</td>
+                    <td><span class="platform-icon instagram">IG</span></td>
+                    <td><span class="time-badge afternoon">Afternoon</span><br>1 PM</td>
+                    <td>Story: Client Win</td>
+                    <td class="content-cell">Client update: David from Karibu Fitness<br><br>When we started (60 days ago):<br>• 523 Instagram followers<br>• 2-3 inquiries/month<br>• Posting gym selfies randomly<br>• Zero email list<br>• Working 6 clients/month (needed 15)<br><br>Now:<br>• 669 followers (+28%)<br>• 35+ consultation requests<br>• Professional workout reels going "viral" (23K views)<br>• 147 email subscribers<br>• FULLY BOOKED + waitlist<br>• 12 new paying clients (KES 132K revenue)<br><br>What changed?<br><br>Not David's expertise (already great).<br>Not his prices (stayed same).<br><br>His VISIBILITY.<br><br>We created:<br>✅ Educational content that positions him as the expert<br>✅ Video strategy that showcases his knowledge<br>✅ Lead magnet that captures interested prospects<br>✅ Email funnel that nurtures them to clients<br><br>That's the Zinara system.<br><br>Your turn?<span class="hashtags">#ClientSuccess #RealResults #FitnessMarketing</span></td>
+                    <td class="canva-cell">Before/after metrics display. Show numbers in contrasting colors (before in gray, after in green). Include profile screenshot mockup. Add testimonial quote from David. Professional case study style.</td>
+                    <td class="hashtags">#ClientSuccess #RealResults #FitnessMarketing #TransformationStory #ZinaraWorks</td>
+                </tr>
+                
+                <tr data-week="week1" data-platform="Facebook">
+                    <td class="date-cell">Nov 4</td>
+                    <td><span class="platform-icon facebook">f</span></td>
+                    <td><span class="time-badge evening">Evening</span><br>7 PM</td>
+                    <td>CTA: Week Starter</td>
+                    <td class="content-cell">New week. New opportunity to be seen.<br><br>Quick question:<br><br>What would happen to your business if:<br>✅ You showed up consistently online (without spending 15 hours/week)<br>✅ Your content looked as professional as big brands<br>✅ Potential customers found YOU when searching<br>✅ Your social media actually generated leads<br><br>That's not a fantasy. That's Zinara's standard outcome.<br><br>Here's the deal:<br><br>We're taking 5 new clients this week.<br>First 3 who book get:<br>• 50% off Month 1<br>• Free 30-day content calendar<br>• Free competitor analysis<br>• Priority onboarding (live in 48 hours)<br><br>After that, regular pricing.<br><br>This is your Monday. Make it count.<br><br>👉 Comment "READY" or DM us<br><br>Let's make you visible.<span class="hashtags">#MondayOffer #NewWeek #TakeAction #ZinaraGrowth</span></td>
+                    <td class="canva-cell">Dynamic Monday energy design. Calendar page showing Monday with "New Week, New Visibility" headline. Benefits listed with icons. Limited spots badge (3/5 remaining). Urgent CTA styling.</td>
+                    <td class="hashtags">#MondayOffer #NewWeek #TakeAction #ZinaraGrowth #LimitedSpots</td>
+                </tr>
+
+                <!-- Nov 5 -->
+                <tr data-week="week1" data-platform="LinkedIn">
+                    <td class="date-cell">Nov 5<br><small>Tue</small></td>
+                    <td><span class="platform-icon linkedin">in</span></td>
+                    <td><span class="time-badge morning">Morning</span><br>7 AM</td>
+                    <td>Insight: AI Truth</td>
+                    <td class="content-cell"><strong>Let's address the elephant: "But AI content isn't authentic."</strong><br><br>I hear this objection a lot.<br><br>Here's what actually happens at Zinara:<br><br>❌ AI doesn't write your captions unsupervised<br>❌ AI doesn't post without approval<br>❌ AI doesn't replace strategy<br><br>✅ AI generates ideas when you're stuck<br>✅ AI creates first drafts we refine<br>✅ AI designs graphics we customize<br>✅ AI frees time for actual client work<br><br>Think of AI as your assistant, not your replacement.<br><br>Your brand voice? Yours.<br>Your messaging? Yours.<br>Your authenticity? 100% intact.<br><br>We just use technology to scale what you'd do manually in 1/10th the time.<br><br>That's not inauthentic. That's smart business.<span class="hashtags">#AIMarketing #AuthenticityMatters #SmartTools</span></td>
+                    <td class="canva-cell">Side-by-side comparison. Left: Human brain icon + "Strategy, Voice, Authenticity". Right: Robot icon + "Speed, Scale, Efficiency". Center: Plus sign. Bottom text: "Together = Smart Marketing". Clean infographic style.</td>
+                    <td class="hashtags">#AIMarketing #AuthenticityMatters #SmartTools #MarketingTruth #AIForBusiness</td>
+                </tr>
+                
+                <tr data-week="week1" data-platform="Instagram">
+                    <td class="date-cell">Nov 5</td>
+                    <td><span class="platform-icon instagram">IG</span></td>
+                    <td><span class="time-badge afternoon">Afternoon</span><br>2 PM</td>
+                    <td>Story: Behind The Scenes</td>
+                    <td class="content-cell">Behind the scenes: How we create your content<br><br>STEP 1: Strategy (30 min)<br>• Learn your voice, goals<br>• Identify ideal customer<br><br>STEP 2: AI Creation (2 hrs)<br>• Generate 30+ ideas<br>• Draft captions<br>• Design graphics<br><br>STEP 3: Refinement (1 hr)<br>• Human review every word<br>• Customize to your style<br><br>STEP 4: Your Approval<br>• You see everything first<br>• We adjust until perfect<br><br>STEP 5: Strategic Posting<br>• Optimal times<br>• Daily engagement<br><br>Total: 3.5 hours for 30 days of content.<br><br>You'd spend 15+ hours doing this yourself.<br><br>We save you time. You grow your business.<span class="hashtags">#BehindTheScenes #ProcessTransparency #HowItWorks</span></td>
+                    <td class="canva-cell">Process flowchart with 5 numbered steps. Icons for each stage. Time savings highlighted in orange. Professional but approachable design. Show transformation from "15 hours" to "3.5 hours".</td>
+                    <td class="hashtags">#BehindTheScenes #ProcessTransparency #HowItWorks #ZinaraProcess #ContentCreation</td>
+                </tr>
+                
+                <tr data-week="week1" data-platform="Facebook">
+                    <td class="date-cell">Nov 5</td>
+                    <td><span class="platform-icon facebook">f</span></td>
+                    <td><span class="time-badge evening">Evening</span><br>7 PM</td>
+                    <td>CTA: Testimonial Focus</td>
+                    <td class="content-cell">"I was spending 10-15 hours weekly on social media, and it still looked amateur. Now my feed looks professional, I get daily inquiries, and I have those 15 hours back. Worth every shilling."<br><br>- Jane M., Upendo Fashions<br><br>This is what happens when you stop doing everything yourself and start working with experts who actually care.<br><br>Jane's results in 90 days:<br>📈 287% engagement increase<br>💬 15-20 inquiries/week (from 1-2/month)<br>📱 41% follower growth<br>💰 KES 180K in new revenue<br>⏰ 12 hours/week saved<br><br>And she's not special. She's strategic.<br><br>Your business deserves the same transformation.<br><br>🎯 Book your free audit this week<br>We'll show you exactly where you're losing customers online.<br><br>👉 DM "AUDIT" or click link in bio<br><br>Let's make you the success story.<span class="hashtags">#ClientTestimonial #RealResults #ProvenSystem</span></td>
+                    <td class="canva-cell">Testimonial card design. Quote in large text at top. Client photo/logo. Metrics displayed as badges (287%, 15-20 inquiries, etc.). 5-star rating graphic. Professional testimonial style.</td>
+                    <td class="hashtags">#ClientTestimonial #RealResults #ProvenSystem #ZinaraSuccess #TransformationTuesday</td>
+                </tr>
+
+                <!-- Nov 6 -->
+                <tr data-week="week1" data-platform="LinkedIn">
+                    <td class="date-cell">Nov 6<br><small>Wed</small></td>
+                    <td><span class="platform-icon linkedin">in</span></td>
+                    <td><span class="time-badge morning">Morning</span><br>7 AM</td>
+                    <td>Insight: Investment ROI</td>
+                    <td class="content-cell"><strong>Marketing isn't an expense. It's an investment with measurable ROI.</strong><br><br>Let's do the math:<br><br>Zinara: KES 15,000/month<br>You get: 15-20 qualified leads/month (conservative)<br>Your close rate: 20% (industry average)<br>Result: 3-4 new customers/month<br><br>Your average customer value: KES 10,000<br>Monthly revenue from Zinara leads: KES 30,000-40,000<br><br>Investment: KES 15,000<br>Return: KES 30,000-40,000<br>ROI: 100-167%<br><br>That's Month 1. Now imagine 6 months. 12 months.<br><br>Plus the compound effect:<br>• Better brand credibility<br>• Organic word-of-mouth<br>• Established online presence<br>• Content library working 24/7<br><br>Smart entrepreneurs don't ask "Can I afford marketing?"<br><br>They ask "Can I afford NOT to market?"<br><br>Book your ROI conversation today.<span class="hashtags">#MarketingROI #SmartInvestment #BusinessGrowth</span></td>
+                    <td class="canva-cell">ROI calculator visual. Input: KES 15K investment. Output: KES 30-40K return. Show calculation steps. Use financial graph style. Green for positive ROI. Make it look like a business case.</td>
+                    <td class="hashtags">#MarketingROI #SmartInvestment #BusinessGrowth #DataDriven #ZinaraMath</td>
+                </tr>
+                
+                <tr data-week="week1" data-platform="Instagram">
+                    <td class="date-cell">Nov 6</td>
+                    <td><span class="platform-icon instagram">IG</span></td>
+                    <td><span class="time-badge afternoon">Afternoon</span><br>1 PM</td>
+                    <td>Story: Myth Busting</td>
+                    <td class="content-cell">Myth vs Reality: Social Media Marketing Edition<br><br>MYTH #1: "I need thousands of followers to make money"<br>REALITY: You need the RIGHT followers. 500 engaged fans > 5,000 ghost followers.<br><br>MYTH #2: "I should post 3x daily on every platform"<br>REALITY: Quality > Quantity. 3 strategic posts/week beats 21 random posts.<br><br>MYTH #3: "I can't afford professional marketing"<br>REALITY: You can't afford NOT to. Invisibility costs more than Zinara.<br><br>MYTH #4: "Social media is just for young people"<br>REALITY: Facebook's biggest age group is 25-34. LinkedIn is 30-49. Your customers are there.<br><br>MYTH #5: "I need to be on TikTok/everywhere"<br>REALITY: Be where YOUR customers are. 2 platforms done well > 5 done poorly.<br><br>Stop believing myths. Start seeing results.<br><br>Which myth have you believed?<span class="hashtags">#MythBusting #MarketingTruth #SocialMediaFacts</span></td>
+                    <td class="canva-cell">Carousel design (5 slides). Each slide: Myth with red X, Reality with green check. Bold typography. Use contrasting colors. Make it shareable and educational. Infographic style.</td>
+                    <td class="hashtags">#MythBusting #MarketingTruth #SocialMediaFacts #Education #WednesdayWisdom</td>
+                </tr>
+                
+                <tr data-week="week1" data-platform="Facebook">
+                    <td class="date-cell">Nov 6</td>
+                    <td><span class="platform-icon facebook">f</span></td>
+                    <td><span class="time-badge evening">Evening</span><br>6 PM</td>
+                    <td>CTA: Mid-Week Push</td>
+                    <td class="content-cell">Wednesday check-in: How's your week going?<br><br>If you started Monday with big marketing goals and now it's Wednesday and you've posted... nothing... you're not alone.<br><br>That's the problem with DIY marketing:<br>• Monday: "I'll batch content this week!"<br>• Tuesday: "After this meeting..."<br>• Wednesday: "Why is it so hard to think of captions?"<br>• Thursday: Panic post something generic<br>• Friday: "I'll do better next week"<br>• Repeat forever<br><br>Meanwhile, your competitors are showing up consistently because they have systems.<br><br>You need the same system.<br><br>🎯 Zinara's Wednesday Special:<br>Book this week, start posting by Friday.<br><br>We'll create:<br>✅ This week's content (emergency coverage)<br>✅ Next month's full calendar<br>✅ Sustainable posting system<br><br>Stop the cycle. Get consistent.<br><br>👉 DM "WEDNESDAY"<span class="hashtags">#WednesdayMotivation #Consistency #MarketingSystem</span></td>
+                    <td class="canva-cell">Weekly calendar visual showing Monday-Friday. Monday: Big plans (bright). Tuesday-Thursday: Fading/missed (gray). Friday: Panic (red). VS. Zinara calendar: All days bright green with checks. Contrast visual.</td>
+                    <td class="hashtags">#WednesdayMotivation #Consistency #MarketingSystem #StopProcrastinating #ZinaraSolution</td>
+                </tr>
+
+                <!-- Nov 7 -->
+                <tr data-week="week1" data-platform="LinkedIn">
+                    <td class="date-cell">Nov 7<br><small>Thu</small></td>
+                    <td><span class="platform-icon linkedin">in</span></td>
+                    <td><span class="time-badge morning">Morning</span><br>7 AM</td>
+                    <td>Week 1 Reflection</td>
+                    <td class="content-cell"><strong>Week 1 lesson: Every successful business was once invisible.</strong><br><br>This week we talked about:<br>✅ The gap between quality and visibility<br>✅ Why AI democratizes marketing<br>✅ How Zinara makes premium affordable<br>✅ Real client transformations<br>✅ The ROI of strategic marketing<br><br>But here's what matters most:<br><br>Your business is already good enough to succeed.<br><br>The product works. The service delivers. The quality is there.<br><br>The only thing missing? Visibility.<br><br>And visibility is solvable. It's not magic. It's not luck. It's strategy + consistency + the right tools.<br><br>That's Zinara's entire purpose.<br><br>Next week: We dive into storytelling and how to make your brand unforgettable.<br><br>But first: Are you ready to be seen?<br><br>If yes, let's talk. Link in bio.<span class="hashtags">#WeeklyReflection #VisibilityJourney #ReadyToGrow</span></td>
+                    <td class="canva-cell">Week 1 recap graphic. Show key points as visual journey/timeline. Start point: "Invisible" (gray). End point: "Unstoppable" (vibrant). Checkpoints with main themes. Inspirational design.</td>
+                    <td class="hashtags">#WeeklyReflection #VisibilityJourney #ReadyToGrow #ThursdayThoughts #ZinaraWeek1</td>
+                </tr>
+                
+                <tr data-week="week1" data-platform="Instagram">
+                    <td class="date-cell">Nov 7</td>
+                    <td><span class="platform-icon instagram">IG</span></td>
+                    <td><span class="time-badge afternoon">Afternoon</span><br>2 PM</td>
+                    <td>Story: Quick Win</td>
+                    <td class="content-cell">Quick Win Thursday: 3 things you can do RIGHT NOW (free) to improve visibility:<br><br>1️⃣ OPTIMIZE YOUR BIO<br>• Remove vague descriptions<br>• Add specific benefit: "I help [who] achieve [what]"<br>• Include clear CTA with link<br><br>2️⃣ USE KEYWORDS IN YOUR NAME FIELD<br>Instagram/LinkedIn lets you add keywords after your name.<br>Example: "Jane Doe | Digital Marketing for SMEs"<br>Instantly better search visibility.<br><br>3️⃣ PIN YOUR BEST CONTENT<br>First impression matters. Pin:<br>• Your best testimonial<br>• Strongest case study<br>• Clearest service explanation<br><br>Do these 3 things in the next hour.<br>They're free. They work.<br><br>Want 100 more tips like this?<br>That's what you get when you work with Zinara.<br><br>We're strategy nerds who love this stuff.<br><br>Book your audit. We'll find 20 quick wins in your first call.<span class="hashtags">#QuickWins #FreeTips #MarketingHacks</span></td>
+                    <td class="canva-cell">Checklist design with 3 actionable items. Each has example screenshot. Make it tutorial-style. Add "Do this now" energy. Use arrows, highlights. Practical and immediately actionable.</td>
+                    <td class="hashtags">#QuickWins #FreeTips #MarketingHacks #ThursdayTips #InstagramGrowth</td>
+                </tr>
+                
+                <tr data-week="week1" data-platform="Facebook">
+                    <td class="date-cell">Nov 7</td>
+                    <td><span class="platform-icon facebook">f</span></td>
+                    <td><span class="time-badge evening">Evening</span><br>7 PM</td>
+                    <td>CTA: Week End Push</td>
+                    <td class="content-cell">End of Week 1. Two paths ahead:<br><br>PATH A: Do nothing<br>• Next week same as this week<br>• Competitors keep winning<br>• You keep wondering "what if?"<br>• Another month of invisibility<br>• Same revenue, same frustration<br><br>PATH B: Take action<br>• Book free 15-min audit tomorrow<br>• Get custom 30-day growth plan<br>• Start posting by Monday<br>• Build momentum immediately<br>• New customers by month-end<br><br>Real talk: Path A is easier. No risk, no effort, no change.<br><br>But Path B is where growth lives.<br><br>And Path B starts with one decision.<br><br>🎯 This week's final offer:<br>First 2 people who book before midnight Friday get:<br>• 50% off Month 1<br>• Free competitor analysis<br>• Same-day strategy call<br><br>After that, list closes until next week.<br><br>Which path do you choose?<br><br>👉 Comment "PATH B" to book<span class="hashtags">#DecisionTime #TakeAction #ChooseGrowth</span></td>
+                    <td class="canva-cell">Fork in road visual. Left path: gray, declining. Label "Status Quo". Right path: vibrant, ascending. Label "Growth". Arrow pointing right. Urgency element: "Choose Now". CTA prominent.</td>
+                    <td class="hashtags">#DecisionTime #TakeAction #ChooseGrowth #FridayDecision #PathToGrowth</td>
+                </tr>
+
+                <!-- WEEK 2: VISIBILITY & STORYTELLING -->
+                <tr class="week-header">
+                    <td colspan="7">WEEK 2 (Nov 8-14): VISIBILITY & STORYTELLING - Becoming Seen, Heard & Valued</td>
+                </tr>
+
+                <!-- Nov 8 -->
